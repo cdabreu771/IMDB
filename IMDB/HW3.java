@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.Collections;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import java.util.Arrays;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -22,6 +24,7 @@ public class HW3 extends javax.swing.JFrame {
     private static String password = "tiger";
     private static String port = "1521";
     private static Connection connection = null;
+    private boolean flag = true;
      /**
      * @param args the command line arguments
      */
@@ -126,6 +129,7 @@ public class HW3 extends javax.swing.JFrame {
 
         jScrollPane6 = new javax.swing.JScrollPane();
         locationList = new javax.swing.JList<>();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -141,15 +145,26 @@ public class HW3 extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        filmLocationList = new javax.swing.JList<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        andOrComboBox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         movieResultsText = new javax.swing.JTextArea();
         movieExecuteButton = new javax.swing.JButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
         jPanel8 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        movieTagText = new javax.swing.JTextArea();
+        tagExecuteButton = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        tagWeightComboBox = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         jPanel9 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox<>();
@@ -165,16 +180,6 @@ public class HW3 extends javax.swing.JFrame {
         yearBeginText = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         yearEndText = new javax.swing.JTextField();
-        jPanel10 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        movieTagText = new javax.swing.JTextArea();
-        tagExecuteButton = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        tagWeightComboBox = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
 
         locationList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -217,12 +222,10 @@ public class HW3 extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(loadCountryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loadCountryButton, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,11 +245,6 @@ public class HW3 extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Country");
 
-        countryList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane5.setViewportView(countryList);
 
         loadLocationButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 18)); // NOI18N
@@ -262,11 +260,13 @@ public class HW3 extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane5)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(loadLocationButton, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addComponent(loadLocationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,19 +286,14 @@ public class HW3 extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("<html>Filming<br> Location<html>");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(filmLocationList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-            .addComponent(jScrollPane2)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,14 +308,6 @@ public class HW3 extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tw Cen MT Condensed", 1, 24)); // NOI18N
         jLabel4.setText("Search between attributes' values:");
-
-        andOrComboBox.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        andOrComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecect AND/OR", "AND", "OR" }));
-        andOrComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                andOrComboBoxActionPerformed(evt);
-            }
-        });
 
         jLabel7.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
         jLabel7.setText("Movie Results");
@@ -338,29 +325,49 @@ public class HW3 extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 18)); // NOI18N
+        jRadioButton1.setText("AND");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 18)); // NOI18N
+        jRadioButton2.setText("OR");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(andOrComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(175, 175, 175)
+                        .addComponent(jLabel7))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(175, 175, 175)
-                        .addComponent(jLabel7))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(147, 147, 147)
-                        .addComponent(movieExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(movieExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -369,7 +376,8 @@ public class HW3 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(andOrComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -380,6 +388,114 @@ public class HW3 extends javax.swing.JFrame {
         );
 
         jPanel8.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 112, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(676, 676, 676)
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(0, 228, Short.MAX_VALUE)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel11.setBackground(new java.awt.Color(255, 204, 51));
+
+        jLabel6.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
+        jLabel6.setText("Movie Tag Values");
+
+        movieTagText.setColumns(20);
+        movieTagText.setRows(5);
+        jScrollPane3.setViewportView(movieTagText);
+
+        tagExecuteButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        tagExecuteButton.setText("Execute Query");
+        tagExecuteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tagExecuteButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        jLabel8.setText("Tag weight is");
+
+        tagWeightComboBox.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        tagWeightComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">,<,=", ">", "<", "=" }));
+
+        jLabel9.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        jLabel9.setText("value");
+
+        jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(tagExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(144, 144, 144))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(1, 1, 1)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(tagExecuteButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jPanel9.setBackground(new java.awt.Color(255, 204, 51));
 
@@ -508,118 +624,6 @@ public class HW3 extends javax.swing.JFrame {
                 .addGap(0, 33, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94)
-                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
-        );
-
-        jPanel11.setBackground(new java.awt.Color(255, 204, 51));
-
-        jLabel6.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
-        jLabel6.setText("Movie Tag Values");
-
-        movieTagText.setColumns(20);
-        movieTagText.setRows(5);
-        jScrollPane3.setViewportView(movieTagText);
-
-        tagExecuteButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        tagExecuteButton.setText("Execute Query");
-        tagExecuteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tagExecuteButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        jLabel8.setText("Tag weight is");
-
-        tagWeightComboBox.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        tagWeightComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">,<,=", ">", "<", "=" }));
-
-        jLabel9.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        jLabel9.setText("value");
-
-        jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel11Layout.createSequentialGroup()
-                                .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(tagExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(144, 144, 144))
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel8))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(1, 1, 1)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tagExecuteButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -634,11 +638,16 @@ public class HW3 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -648,7 +657,8 @@ public class HW3 extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -661,8 +671,8 @@ public class HW3 extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 9, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -676,7 +686,9 @@ public class HW3 extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -688,14 +700,10 @@ public class HW3 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void andOrComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_andOrComboBoxActionPerformed
-        andOrComboBox.addItem("Select AND/OR");
-        andOrComboBox.addItem("AND");
-        andOrComboBox.addItem("OR");// TODO add your handling code here:
-    }//GEN-LAST:event_andOrComboBoxActionPerformed
-
     private void movieExecuteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieExecuteButtonActionPerformed
-        // TODO add your handling code here:
+        buttonGroup1.clearSelection();  // TODO add your handling code here:
+        jRadioButton1.setEnabled(true);
+        jRadioButton2.setEnabled(true);
     }//GEN-LAST:event_movieExecuteButtonActionPerformed
 
     private void tagExecuteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tagExecuteButtonActionPerformed
@@ -710,49 +718,202 @@ public class HW3 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_genreListValueChanged
 
+    @SuppressWarnings("ConvertToTryWithResources")
     private void loadLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadLocationButtonActionPerformed
-                        // TODO add your handling code here:
-    }//GEN-LAST:event_loadLocationButtonActionPerformed
-
-    private void loadCountryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCountryButtonActionPerformed
-        DefaultListModel model = new DefaultListModel();
-        String selectedStr = "";
-        Object[] selected = genreList.getSelectedValues();
-        
-        for (int i = 0; i < selected.length;i++){
-            selectedStr += (String)selected[i];
-        }
-        
-        //SELECT MID FROM MOVIE_GENRES WHERE COUNTRY='';
-        
+DefaultListModel model = new DefaultListModel();
+        String query = "";
+        Object[] selected;
+        int rowsSelected;
+        StringBuilder stringbuilder = new StringBuilder();
+        selected = countryList.getSelectedValues();
         try{
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT DISTINCT C.COUNTRY FROM MOVIE_GENRES M,MOVIE_COUNTRIES C WHERE M.MID = C.MID ORDER BY COUNTRY ASC");
+           
+            if (flag){
+                stringbuilder.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_COUNTRIES C WHERE L.MID = C.MID ");
+                
+               for (int i = 0; i < selected.length-1;i++){
+                   stringbuilder.append("AND C.COUNTRY = '" + selected[i] + "'");
+                   stringbuilder.append("INTERSECT SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_COUNTRIES C WHERE L.MID = C.MID ");
+                }
+               stringbuilder.append("AND C.COUNTRY = '" + selected[selected.length-1] + "'");
+               query = stringbuilder.toString();
+                        
+                
+                ResultSet rs = statement.executeQuery(query);
+            
+                while(rs.next()){
          
-            while(rs.next()){
-               model.addElement(rs.getString("GENRE"));
+                           model.addElement(rs.getString("COUNTRY"));    
+                }   
+                rs.close();
             }
-            genreList.setModel(model);
+            else{
+                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                
+               for (int i = 0; i < selected.length-1;i++){
+                   stringbuilder.append("AND G.GENRE = '" + selected[i] + "'");
+                   stringbuilder.append("UNION ALL SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                }
+               stringbuilder.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
+               query = stringbuilder.toString();
+            
+                ResultSet rs = statement.executeQuery(query);
+            
+                while(rs.next()){
+         
+                           model.addElement(rs.getString("COUNTRY"));    
+                }   
+                rs.close();
+            }
+        
+            filmLocationList.setModel(model);
             statement.close();
-            rs.close();
-        }catch (SQLException e){
-            while (e != null) {
-                System.out.println("Message: " + e.getMessage());
+            
+        } catch (SQLException e){
+            System.out.println("Message: " + e.getMessage());
                 System.out.println("SQLState: " + e.getSQLState());
                 System.out.println("Vendor Error: " + e.getErrorCode());
 
                 e = e.getNextException();
+        
+
+        //SELECT MID FROM MOVIE_GENRES WHERE COUNTRY='';gi
+        
+           // TODO add your handling code here:
+    
+        }                  // TODO add your handling code here:
+    }//GEN-LAST:event_loadLocationButtonActionPerformed
+
+    private void loadCountryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCountryButtonActionPerformed
+        DefaultListModel model = new DefaultListModel();
+        DefaultListModel model2 = new DefaultListModel();
+        String query1 = "";
+        String query2 = "";
+        Object[] selected;
+        StringBuilder stringbuilder = new StringBuilder();
+        StringBuilder stringbuilder2 = new StringBuilder();
+        selected = genreList.getSelectedValues();
+        try{
+            Statement statement = connection.createStatement();
+           
+            if (flag){
+                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+               
+               for (int i = 0; i < selected.length-1;i++){
+                   stringbuilder.append("AND G.GENRE = '" + selected[i] + "'");
+                   stringbuilder.append("INTERSECT SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");   
+                }
+               stringbuilder.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
+              
+               query1 = stringbuilder.toString();
+               
+                ResultSet rs = statement.executeQuery(query1);
+                
+                while(rs.next()){                  
+                           
+                           model.addElement(rs.getString("COUNTRY"));   
+                }   
+                rs.close();                
             }
+            else{
+                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                
+               for (int i = 0; i < selected.length-1;i++){
+                   stringbuilder.append("AND G.GENRE = '" + selected[i] + "'");
+                   stringbuilder.append("UNION ALL SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                }
+               stringbuilder.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
+               
+               query1 = stringbuilder.toString();
+ 
+                ResultSet rs = statement.executeQuery(query1);
+                      
+                while(rs.next()){                 
+                           
+                           model.addElement(rs.getString("COUNTRY"));                   
+                }   
+                rs.close();
+            }
+        
+            countryList.setModel(model);
+            
+            if (flag){
+                stringbuilder2.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
+                
+               for (int i = 0; i < selected.length-1;i++){
+                    stringbuilder2.append("AND G.GENRE = '" + selected[i] + "'");
+                    stringbuilder2.append("INTERSECT SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
+                }
+             
+               stringbuilder2.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
+               
+               query2 = stringbuilder2.toString();
+              
+                ResultSet rs2 = statement.executeQuery(query2);
+            
+                while(rs2.next()){
+                    model2.addElement(rs2.getString("COUNTRY"));
+                }
+                rs2.close();
+            }
+            else{              
+                stringbuilder2.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
+                
+               for (int i = 0; i < selected.length-1;i++){
+                 
+                   stringbuilder2.append("AND G.GENRE = '" + selected[i] + "'");
+                   stringbuilder2.append("UNION ALL SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
+                }
+              
+               stringbuilder2.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
+              
+               query2 = stringbuilder2.toString();
+          
+                ResultSet rs2 = statement.executeQuery(query2);
+           
+                while(rs2.next()){
+                    model2.addElement(rs2.getString("COUNTRY"));
+                }
+                rs2.close();
+            }
+        
+            filmLocationList.setModel(model2);
+            statement.close();
+            
+        } catch (SQLException e){
+            System.out.println("Message: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("Vendor Error: " + e.getErrorCode());
+
+                e = e.getNextException();
         }
-        return;         // TODO add your handling code here:
+
+
+        //SELECT MID FROM MOVIE_GENRES WHERE COUNTRY='';gi
+        
+           // TODO add your handling code here:
     }//GEN-LAST:event_loadCountryButtonActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        flag = true;      
+        jRadioButton1.setEnabled(false);
+        jRadioButton2.setEnabled(false);// TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        flag = false;
+        jRadioButton1.setEnabled(false);
+        jRadioButton2.setEnabled(false);       // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> andOrComboBox;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JList<String> countryList;
+    private javax.swing.JList<String> filmLocationList;
     private javax.swing.JList<String> genreList;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
@@ -770,7 +931,6 @@ public class HW3 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -782,6 +942,8 @@ public class HW3 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

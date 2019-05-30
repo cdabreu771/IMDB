@@ -2,6 +2,7 @@ package IMDB;
 import java.io.*;
 import java.sql.*;
 
+// movies.dat movie_genres.dat movie_directors.dat movie_actors.dat movie_countries.dat movie_locations.dat tags.dat movie_tags.dat user_taggedmovies.dat USER_TAGGEDMOVIES_TIMESTAMPS.dat USER_RATEDMOVIES.dat USER_RATEDMOVIES_TIMESTAMPS.dat
 public class PopulateDB {
     
     private static String host = "localhost";
@@ -104,5 +105,7 @@ public class PopulateDB {
                 }
             }
         }
+        
+        
     }
 }
