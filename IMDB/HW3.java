@@ -25,6 +25,12 @@ public class HW3 extends javax.swing.JFrame {
     private static String port = "1521";
     private static Connection connection = null;
     private boolean flag = true;
+    private Object[] locationsSelected = null;
+    private Object[] countriesSelected = null;
+    private Object[] genresSelected = null;
+    String ratingCompare = ">=";
+    String numReviewsCompare = ">=";
+    String tagsCompare = ">=";
      /**
      * @param args the command line arguments
      */
@@ -149,25 +155,30 @@ public class HW3 extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        movieResultsText = new javax.swing.JTextArea();
         movieExecuteButton = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        movieResultsList = new javax.swing.JList<>();
+        clearButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        selectedMovieInfo = new javax.swing.JList<>();
+        movieCount = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        movieTagText = new javax.swing.JTextArea();
         tagExecuteButton = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         tagWeightComboBox = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tagValueText = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        movieTagsList = new javax.swing.JList<>();
+        tagCount = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        ratingComboBox = new javax.swing.JComboBox<>();
         ratingValueText = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -201,6 +212,7 @@ public class HW3 extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Genre");
 
+        genreList.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
         genreList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 genreListValueChanged(evt);
@@ -245,6 +257,7 @@ public class HW3 extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Country");
 
+        countryList.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
         jScrollPane5.setViewportView(countryList);
 
         loadLocationButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 18)); // NOI18N
@@ -286,22 +299,26 @@ public class HW3 extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("<html>Filming<br> Location<html>");
 
+        filmLocationList.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
         jScrollPane2.setViewportView(filmLocationList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabel3)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(1, 1, 1)
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 51));
@@ -311,11 +328,6 @@ public class HW3 extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
         jLabel7.setText("Movie Results");
-
-        movieResultsText.setColumns(20);
-        movieResultsText.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        movieResultsText.setRows(5);
-        jScrollPane1.setViewportView(movieResultsText);
 
         movieExecuteButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
         movieExecuteButton.setText("Execute Query");
@@ -343,47 +355,84 @@ public class HW3 extends javax.swing.JFrame {
             }
         });
 
+        movieResultsList.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
+        movieResultsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        movieResultsList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                movieResultsListMouseClicked(evt);
+            }
+        });
+        jScrollPane7.setViewportView(movieResultsList);
+
+        clearButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        clearButton.setText("Clear Search");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        selectedMovieInfo.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
+        jScrollPane3.setViewportView(selectedMovieInfo);
+
+        movieCount.setBackground(new java.awt.Color(255, 255, 255));
+        movieCount.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(175, 175, 175)
-                        .addComponent(jLabel7))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(movieExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton2)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButton2))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(movieCount, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 29, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(movieExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(185, 185, 185)
+                .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jRadioButton1)
+                        .addComponent(jRadioButton2))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)))
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(movieCount, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(movieExecuteButton)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(movieExecuteButton)
+                    .addComponent(clearButton))
                 .addContainerGap())
         );
 
@@ -420,10 +469,6 @@ public class HW3 extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
         jLabel6.setText("Movie Tag Values");
 
-        movieTagText.setColumns(20);
-        movieTagText.setRows(5);
-        jScrollPane3.setViewportView(movieTagText);
-
         tagExecuteButton.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
         tagExecuteButton.setText("Execute Query");
         tagExecuteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -436,44 +481,57 @@ public class HW3 extends javax.swing.JFrame {
         jLabel8.setText("Tag weight is");
 
         tagWeightComboBox.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        tagWeightComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">,<,=", ">", "<", "=" }));
+        tagWeightComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">", "<", "=" }));
+        tagWeightComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tagWeightComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
         jLabel9.setText("value");
 
-        jTextField1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        tagValueText.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        tagValueText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                tagValueTextActionPerformed(evt);
             }
         });
+
+        movieTagsList.setFont(new java.awt.Font("Tw Cen MT", 0, 16)); // NOI18N
+        movieTagsList.setToolTipText("");
+        jScrollPane1.setViewportView(movieTagsList);
+
+        tagCount.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(172, 172, 172)
+                .addComponent(tagExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel11Layout.createSequentialGroup()
-                                .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(18, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(tagExecuteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(144, 144, 144))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tagValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tagCount, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 30, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -483,15 +541,16 @@ public class HW3 extends javax.swing.JFrame {
                         .addGap(24, 24, 24)
                         .addComponent(jLabel8))
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addGap(8, 8, 8)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tagWeightComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tagValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tagCount, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(1, 1, 1)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(tagExecuteButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -502,8 +561,13 @@ public class HW3 extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
         jLabel10.setText("Rating is");
 
-        jComboBox3.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">,>=,<=,<,=", ">", ">=", "<=", "<", "=" }));
+        ratingComboBox.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
+        ratingComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">=", ">", "<=", "<", "=" }));
+        ratingComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ratingComboBoxActionPerformed(evt);
+            }
+        });
 
         ratingValueText.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
 
@@ -514,12 +578,17 @@ public class HW3 extends javax.swing.JFrame {
         jLabel12.setText("Num of Reviews is");
 
         numReviewsComboBox.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
-        numReviewsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">,>=,<=,<,=", ">", ">=", "<=", "<", "=" }));
+        numReviewsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { ">=", ">", "<=", "<", "=" }));
+        numReviewsComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numReviewsComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel13.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
         jLabel13.setText("value");
 
-        numReviewsText.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 16)); // NOI18N
+        numReviewsText.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 24)); // NOI18N
 
         jPanel12.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -531,7 +600,7 @@ public class HW3 extends javax.swing.JFrame {
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGap(205, 205, 205)
+                .addGap(185, 185, 185)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -564,19 +633,19 @@ public class HW3 extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numReviewsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(numReviewsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numReviewsText, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numReviewsText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ratingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ratingValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ratingValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -584,8 +653,8 @@ public class HW3 extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel15)
                         .addGap(18, 18, 18)
-                        .addComponent(yearEndText, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(68, Short.MAX_VALUE))
+                        .addComponent(yearEndText, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -597,25 +666,27 @@ public class HW3 extends javax.swing.JFrame {
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel10)
                             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ratingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel11))))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(ratingValueText, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(numReviewsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13)))
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(numReviewsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13))))
+                        .addGap(9, 9, 9))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numReviewsText, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)))
-                .addGap(9, 9, 9)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jLabel14)
                     .addComponent(yearBeginText, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
@@ -630,24 +701,21 @@ public class HW3 extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(554, 554, 554)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 582, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -658,12 +726,12 @@ public class HW3 extends javax.swing.JFrame {
                         .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(91, 91, 91))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -671,8 +739,8 @@ public class HW3 extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1195, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -686,33 +754,355 @@ public class HW3 extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void movieExecuteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieExecuteButtonActionPerformed
-        buttonGroup1.clearSelection();  // TODO add your handling code here:
-        jRadioButton1.setEnabled(true);
-        jRadioButton2.setEnabled(true);
+        DefaultListModel model = new DefaultListModel();
+        
+        
+        String ratingValue="";
+        String numReviews="";
+        String yearBegin="";
+        String yearEnd="";
+        String query = "";
+        int closedParenthesis = 0;
+        
+        if (ratingValueText.getText().isEmpty()){
+            ratingValue = "0";
+        }
+        else{
+            ratingValue=ratingValueText.getText();
+        }
+        
+        if (numReviewsText.getText().isEmpty()){
+            numReviews = "0";
+        }
+        else{
+            numReviews = numReviewsText.getText();
+        }
+        
+        if(yearBeginText.getText().isEmpty() || yearEndText.getText().isEmpty()){
+            yearBegin = "0";
+            yearEnd = "5000";
+        }
+        else{
+            yearBegin = yearBeginText.getText();
+            yearEnd = yearEndText.getText();
+        }
+        try{
+            Statement statement = connection.createStatement();
+            StringBuilder stringbuilder = new StringBuilder();
+        
+        
+            genresSelected = genreList.getSelectedValues();
+            
+            if(flag){
+                
+                closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT M.NAME FROM MOVIES M WHERE M.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
+                for(int i = 1; i < genresSelected.length ;i++){
+                    stringbuilder.append(" AND M.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                    closedParenthesis++;
+                }
+               for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                
+                closedParenthesis = 0;
+
+                if(!(countryList.isSelectionEmpty())){
+                    countriesSelected = countryList.getSelectedValues();
+                    closedParenthesis++;
+                stringbuilder.append(" AND M.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[0] + "'");
+                for(int i = 1; i < countriesSelected.length; i++){
+                    stringbuilder.append(" AND M.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[i] + "'");
+                    closedParenthesis++;
+                }
+                
+                for(int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                closedParenthesis = 0;
+                
+                
+                if(!(filmLocationList.isSelectionEmpty())){
+                    closedParenthesis++;
+                     locationsSelected = filmLocationList.getSelectedValues();
+                stringbuilder.append(" AND M.MID IN (SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[0] + "'");
+                for(int i = 1; i < locationsSelected.length; i++){
+                    stringbuilder.append(" AND M.MID IN (SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[i] + "'");
+                   closedParenthesis++;
+                }
+                for(int i = 0; i < closedParenthesis;i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+
+                stringbuilder.append("AND M.RATING "+ ratingCompare);
+                stringbuilder.append(" " + ratingValue + " AND M.NUM_REVIEW " + numReviewsCompare  + numReviews + " AND ");
+                stringbuilder.append("M.YEAR > " + yearBegin + " AND M.YEAR < " + yearEnd );
+                stringbuilder.append(" ORDER BY M.NAME ASC");
+                              
+               
+            }
+            
+            else{
+                 closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT M.NAME FROM MOVIES M WHERE M.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
+                for(int i = 1; i < genresSelected.length ;i++){
+                    stringbuilder.append(" UNION SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                }
+               for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                
+                closedParenthesis = 0;
+
+                if(!(countryList.isSelectionEmpty())){
+                    countriesSelected = countryList.getSelectedValues();
+                    closedParenthesis++;
+                stringbuilder.append(" AND M.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[0] + "'");
+                for(int i = 1; i < countriesSelected.length; i++){
+                    stringbuilder.append(" UNION SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[i] + "'");
+                }
+                
+                for(int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                closedParenthesis = 0;
+                
+                
+                if(!(filmLocationList.isSelectionEmpty())){
+                    closedParenthesis++;
+                     locationsSelected = filmLocationList.getSelectedValues();
+                stringbuilder.append(" AND M.MID IN (SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[0] + "'");
+                for(int i = 1; i < locationsSelected.length; i++){
+                    stringbuilder.append(" UNION SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[i] + "'");
+                  
+                }
+                for(int i = 0; i < closedParenthesis;i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                stringbuilder.append("AND M.RATING "+ ratingCompare);
+                stringbuilder.append(" " + ratingValue + " AND M.NUM_REVIEW " + numReviewsCompare + numReviews + " AND ");
+                stringbuilder.append("M.YEAR > " + yearBegin + " AND M.YEAR < " + yearEnd);
+                stringbuilder.append(" ORDER BY M.NAME ASC");
+            }
+                
+           
+            query = stringbuilder.toString();
+            System.out.println(query);
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+               model.addElement(rs.getString("NAME"));
+            }
+           rs.close();
+           movieResultsList.setModel(model);
+          int count =  movieResultsList.getModel().getSize();
+          movieCount.setText("Count: " + count);
+           statement.close();
+         
+
+        } catch (SQLException e){
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("Vendor Error: " + e.getErrorCode());
+
+            e = e.getNextException();
+        }
     }//GEN-LAST:event_movieExecuteButtonActionPerformed
 
     private void tagExecuteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tagExecuteButtonActionPerformed
-        // TODO add your handling code here:
+        DefaultListModel model =  new DefaultListModel();
+        
+        String ratingValue="";
+        String numReviews="";
+        String yearBegin="";
+        String yearEnd="";
+        String query = "";
+        String tagWeight = "";
+        int closedParenthesis = 0;
+        StringBuilder resultsString = new StringBuilder();
+        
+        if (ratingValueText.getText().isEmpty()){
+            ratingValue = "0";
+        }
+        else{
+            ratingValue=ratingValueText.getText();
+        }
+        
+        if (numReviewsText.getText().isEmpty()){
+            numReviews = "0";
+        }
+        else{
+            numReviews = numReviewsText.getText();
+        }
+        
+        if(yearBeginText.getText().isEmpty() || yearEndText.getText().isEmpty()){
+            yearBegin = "0";
+            yearEnd = "5000";
+        }
+        else{
+            yearBegin = yearBeginText.getText();
+            yearEnd = yearEndText.getText();
+        }
+        
+        if(tagValueText.getText().isEmpty()){
+            tagWeight = "0";
+        }
+        else{
+            tagWeight = tagValueText.getText();
+        }
+        try{
+            Statement statement = connection.createStatement();
+            StringBuilder stringbuilder = new StringBuilder();
+        
+        
+            genresSelected = genreList.getSelectedValues();
+            
+            if(flag){
+                 closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT T.TEXT FROM TAGS T, MOVIE_TAGS R, MOVIES M WHERE T.TID = R.TID AND R.MID = M.MID AND M.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
+                for(int i = 1; i < genresSelected.length ;i++){
+                    stringbuilder.append(" AND M.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                    closedParenthesis++;
+                }
+               for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                
+                closedParenthesis = 0;
+
+                if(!(countryList.isSelectionEmpty())){
+                    countriesSelected = countryList.getSelectedValues();
+                    closedParenthesis++;
+                stringbuilder.append(" AND M.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[0] + "'");
+                for(int i = 1; i < countriesSelected.length; i++){
+                    stringbuilder.append(" AND M.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[i] + "'");
+                    closedParenthesis++;
+                }
+                
+                for(int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                closedParenthesis = 0;
+                
+                
+                if(!(filmLocationList.isSelectionEmpty())){
+                    closedParenthesis++;
+                     locationsSelected = filmLocationList.getSelectedValues();
+                stringbuilder.append(" AND M.MID IN (SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[0] + "'");
+                for(int i = 1; i < locationsSelected.length; i++){
+                    stringbuilder.append(" AND M.MID IN (SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[i] + "'");
+                   closedParenthesis++;
+                }
+                for(int i = 0; i < closedParenthesis;i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                stringbuilder.append("AND M.RATING "+ ratingCompare + " ");
+                stringbuilder.append(ratingValue + " AND M.NUM_REVIEW " + numReviewsCompare + numReviews + " AND ");
+                stringbuilder.append("M.YEAR > " + yearBegin + " AND M.YEAR < " + yearEnd + " AND R.TWEIGHT " + tagsCompare + tagWeight);
+                stringbuilder.append(" ORDER BY T.TEXT ASC");
+            }
+            
+            else{
+                 closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT T.TEXT FROM TAGS T, MOVIE_TAGS R, MOVIES M WHERE T.TID = R.TID AND R.MID = M.MID AND M.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
+                for(int i = 1; i < genresSelected.length ;i++){
+                    stringbuilder.append(" UNION SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                }
+               for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                
+                closedParenthesis = 0;
+
+                if(!(countryList.isSelectionEmpty())){
+                    countriesSelected = countryList.getSelectedValues();
+                    closedParenthesis++;
+                stringbuilder.append(" AND M.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[0] + "'");
+                for(int i = 1; i < countriesSelected.length; i++){
+                    stringbuilder.append(" UNION SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[i] + "'");
+                }
+                
+                for(int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                closedParenthesis = 0;
+                
+                
+                if(!(filmLocationList.isSelectionEmpty())){
+                    closedParenthesis++;
+                     locationsSelected = filmLocationList.getSelectedValues();
+                stringbuilder.append(" AND M.MID IN (SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[0] + "'");
+                for(int i = 1; i < locationsSelected.length; i++){
+                    stringbuilder.append(" UNION SELECT L.MID FROM MOVIE_LOCATIONS L WHERE L.COUNTRY = '" + locationsSelected[i] + "'");
+                  
+                }
+                for(int i = 0; i < closedParenthesis;i++){
+                    stringbuilder.append(")");
+                }
+                }
+                
+                stringbuilder.append("AND M.RATING "+ ratingCompare);
+                stringbuilder.append(" " + ratingValue + " AND M.NUM_REVIEW " + numReviewsCompare + numReviews + " AND ");
+                stringbuilder.append("M.YEAR > " + yearBegin + " AND M.YEAR < " + yearEnd + " AND R.TWEIGHT " + tagsCompare + tagWeight);
+                stringbuilder.append(" ORDER BY T.TEXT ASC");
+            }
+           
+            query = stringbuilder.toString();
+            System.out.println(query);
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+               model.addElement(rs.getString("TEXT"));
+          
+            }
+            
+            movieTagsList.setModel(model);
+            int count =  movieTagsList.getModel().getSize();
+            tagCount.setText("Count: " + count);
+            
+           rs.close();
+         
+           statement.close();
+           
+
+        } catch (SQLException e){
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("Vendor Error: " + e.getErrorCode());
+
+            e = e.getNextException();
+        }
+                                                // TODO add your handling code here:
     }//GEN-LAST:event_tagExecuteButtonActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void tagValueTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tagValueTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        
+        //String
+    }//GEN-LAST:event_tagValueTextActionPerformed
 
     private void genreListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_genreListValueChanged
         // TODO add your handling code here:
@@ -722,93 +1112,121 @@ public class HW3 extends javax.swing.JFrame {
     private void loadLocationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadLocationButtonActionPerformed
 DefaultListModel model = new DefaultListModel();
         String query = "";
-        Object[] selected;
-        int rowsSelected;
         StringBuilder stringbuilder = new StringBuilder();
-        selected = countryList.getSelectedValues();
+        countriesSelected = countryList.getSelectedValues();
+        genresSelected = genreList.getSelectedValues();
+        int closedParenthesis = 0;
+        
         try{
             Statement statement = connection.createStatement();
-           
-            if (flag){
-                stringbuilder.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_COUNTRIES C WHERE L.MID = C.MID ");
-                
-               for (int i = 0; i < selected.length-1;i++){
-                   stringbuilder.append("AND C.COUNTRY = '" + selected[i] + "'");
-                   stringbuilder.append("INTERSECT SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_COUNTRIES C WHERE L.MID = C.MID ");
-                }
-               stringbuilder.append("AND C.COUNTRY = '" + selected[selected.length-1] + "'");
-               query = stringbuilder.toString();
-                        
-                
-                ResultSet rs = statement.executeQuery(query);
             
-                while(rs.next()){
-         
-                           model.addElement(rs.getString("COUNTRY"));    
-                }   
-                rs.close();
+            if(flag){
+                closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L WHERE L.MID IN (SELECT G.MID FROM MOVIE_GENRES"
+                        + " G WHERE G.GENRE = '" + genresSelected[0] + "'");
+                
+                for (int i =1; i < genresSelected.length;i++){
+                    
+                    stringbuilder.append(" AND L.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                    closedParenthesis++;
+                }
+                for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                closedParenthesis = 0;
+                
+                                     
+                
+                closedParenthesis++;    
+                stringbuilder.append(" AND L.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[0] + "'"); 
+                
+                for(int i = 1; i < countriesSelected.length; i++){
+                    stringbuilder.append(" AND L.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[i] + "'");
+                    closedParenthesis++;
+                }
+                for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                stringbuilder.append("ORDER BY L.COUNTRY ASC");
             }
+            
             else{
-                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
-                
-               for (int i = 0; i < selected.length-1;i++){
-                   stringbuilder.append("AND G.GENRE = '" + selected[i] + "'");
-                   stringbuilder.append("UNION ALL SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L WHERE L.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
+                for(int i = 1; i < genresSelected.length ;i++){
+                    stringbuilder.append(" UNION SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
                 }
-               stringbuilder.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
-               query = stringbuilder.toString();
-            
-                ResultSet rs = statement.executeQuery(query);
-            
-                while(rs.next()){
-         
-                           model.addElement(rs.getString("COUNTRY"));    
-                }   
-                rs.close();
+               for (int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                
+                closedParenthesis = 0;
+
+                
+                    
+                closedParenthesis++;
+                stringbuilder.append(" AND L.MID IN (SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[0] + "'");
+                for(int i = 1; i < countriesSelected.length; i++){
+                    stringbuilder.append(" UNION SELECT C.MID FROM MOVIE_COUNTRIES C WHERE C.COUNTRY = '" + countriesSelected[i] + "'");
+                }
+                
+                for(int i = 0; i < closedParenthesis; i++){
+                    stringbuilder.append(")");
+                }
+                stringbuilder.append("ORDER BY L.COUNTRY ASC");
+                
+                
             }
-        
-            filmLocationList.setModel(model);
-            statement.close();
-            
+           
+            query = stringbuilder.toString();
+            System.out.println(query);
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+               model.addElement(rs.getString("COUNTRY"));
+            }
+           rs.close();
+           filmLocationList.setModel(model);
+           statement.close();
+
         } catch (SQLException e){
             System.out.println("Message: " + e.getMessage());
-                System.out.println("SQLState: " + e.getSQLState());
-                System.out.println("Vendor Error: " + e.getErrorCode());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("Vendor Error: " + e.getErrorCode());
 
-                e = e.getNextException();
-        
-
-        //SELECT MID FROM MOVIE_GENRES WHERE COUNTRY='';gi
-        
-           // TODO add your handling code here:
-    
-        }                  // TODO add your handling code here:
+            e = e.getNextException();
+        }
     }//GEN-LAST:event_loadLocationButtonActionPerformed
 
     private void loadCountryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCountryButtonActionPerformed
         DefaultListModel model = new DefaultListModel();
-        DefaultListModel model2 = new DefaultListModel();
-        String query1 = "";
-        String query2 = "";
-        Object[] selected;
+        //DefaultListModel model2 = new DefaultListModel();
+        String query = "";
+        //String query2 = "";
+        //Object[] genresSelected;
         StringBuilder stringbuilder = new StringBuilder();
-        StringBuilder stringbuilder2 = new StringBuilder();
-        selected = genreList.getSelectedValues();
+        //StringBuilder stringbuilder2 = new StringBuilder();
+        jRadioButton1.setEnabled(false);
+        jRadioButton2.setEnabled(false);
+        genresSelected = genreList.getSelectedValues();
+        int closedParenthesis = 0;
         try{
             Statement statement = connection.createStatement();
            
             if (flag){
-                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C WHERE C.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
                
-               for (int i = 0; i < selected.length-1;i++){
-                   stringbuilder.append("AND G.GENRE = '" + selected[i] + "'");
-                   stringbuilder.append("INTERSECT SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");   
+               for (int i = 1; i < genresSelected.length;i++){
+                   stringbuilder.append(" AND C.MID IN (SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                     closedParenthesis++;
                 }
-               stringbuilder.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
-              
-               query1 = stringbuilder.toString();
+              for(int i = 0; i < closedParenthesis;i++){
+                  stringbuilder.append(")");
+              }
+               stringbuilder.append("ORDER BY C.COUNTRY ASC");
+               query = stringbuilder.toString();
                
-                ResultSet rs = statement.executeQuery(query1);
+                ResultSet rs = statement.executeQuery(query);
                 
                 while(rs.next()){                  
                            
@@ -817,17 +1235,21 @@ DefaultListModel model = new DefaultListModel();
                 rs.close();                
             }
             else{
-                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+                closedParenthesis++;
+                stringbuilder.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C WHERE C.MID IN(SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[0] + "'");
                 
-               for (int i = 0; i < selected.length-1;i++){
-                   stringbuilder.append("AND G.GENRE = '" + selected[i] + "'");
-                   stringbuilder.append("UNION ALL SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIE_GENRES G WHERE C.MID = G.MID ");
+               for (int i = 1; i < genresSelected.length;i++){
+                   stringbuilder.append(" UNION SELECT G.MID FROM MOVIE_GENRES G WHERE G.GENRE = '" + genresSelected[i] + "'");
+                   
                 }
-               stringbuilder.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
+               for (int i = 0; i < closedParenthesis; i++){
+                   stringbuilder.append(")");
+               }
                
-               query1 = stringbuilder.toString();
+               stringbuilder.append("ORDER BY C.COUNTRY ASC");
+               query = stringbuilder.toString();
  
-                ResultSet rs = statement.executeQuery(query1);
+                ResultSet rs = statement.executeQuery(query);
                       
                 while(rs.next()){                 
                            
@@ -837,48 +1259,6 @@ DefaultListModel model = new DefaultListModel();
             }
         
             countryList.setModel(model);
-            
-            if (flag){
-                stringbuilder2.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
-                
-               for (int i = 0; i < selected.length-1;i++){
-                    stringbuilder2.append("AND G.GENRE = '" + selected[i] + "'");
-                    stringbuilder2.append("INTERSECT SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
-                }
-             
-               stringbuilder2.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
-               
-               query2 = stringbuilder2.toString();
-              
-                ResultSet rs2 = statement.executeQuery(query2);
-            
-                while(rs2.next()){
-                    model2.addElement(rs2.getString("COUNTRY"));
-                }
-                rs2.close();
-            }
-            else{              
-                stringbuilder2.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
-                
-               for (int i = 0; i < selected.length-1;i++){
-                 
-                   stringbuilder2.append("AND G.GENRE = '" + selected[i] + "'");
-                   stringbuilder2.append("UNION ALL SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIE_GENRES G WHERE L.MID = G.MID ");
-                }
-              
-               stringbuilder2.append("AND G.GENRE = '" + selected[selected.length-1] + "'");
-              
-               query2 = stringbuilder2.toString();
-          
-                ResultSet rs2 = statement.executeQuery(query2);
-           
-                while(rs2.next()){
-                    model2.addElement(rs2.getString("COUNTRY"));
-                }
-                rs2.close();
-            }
-        
-            filmLocationList.setModel(model2);
             statement.close();
             
         } catch (SQLException e){
@@ -907,15 +1287,220 @@ DefaultListModel model = new DefaultListModel();
         jRadioButton2.setEnabled(false);       // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
+    private void ratingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ratingComboBoxActionPerformed
+        ratingCompare = (String) ratingComboBox.getSelectedItem();  
+      // TODO add your handling code here:
+    }//GEN-LAST:event_ratingComboBoxActionPerformed
+
+    private void numReviewsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numReviewsComboBoxActionPerformed
+        numReviewsCompare = (String) numReviewsComboBox.getSelectedItem();// TODO add your handling code here:
+    }//GEN-LAST:event_numReviewsComboBoxActionPerformed
+
+    private void movieResultsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieResultsListMouseClicked
+        Object[] selection = movieResultsList.getSelectedValues();
+        DefaultListModel model = new DefaultListModel();
+        String name = selection[0].toString();
+        String query = "";
+        
+        StringBuilder stringbuilder = new StringBuilder();
+        
+        //stringbuilder.append("SELECT DISTINCT M.NAME, G.GENRE, M.YEAR, C.COUNTRY, L.COUNTRY, M.RATING, M.NUM_REVIEW FROM MOVIES M, MOVIE_GENRES G,"
+               // + "MOVIE_COUNTRIES C, MOVIE_LOCATIONS L WHERE M.MID = G.MID AND M.MID = C.MID AND M.MID = L.MID AND M.NAME = '");
+        //stringbuilder.append(selection[0] + "'");
+        
+        try{
+            stringbuilder.append("SELECT DISTINCT M.NAME FROM MOVIES M WHERE M.NAME = '" + name + "'");
+            query = stringbuilder.toString();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            StringBuilder str1 = new StringBuilder();
+            //model.addElement("Title:");
+            while (rs.next()){
+                    String title = rs.getString("NAME");
+                    str1.append(title);
+            }
+            
+            String title = str1.toString();
+            String movieTitle = "Movie Title: " + title + "\n";
+            model.addElement(movieTitle);
+            
+            
+            
+            StringBuilder stringbuilder2 = new StringBuilder();
+            StringBuilder str2 = new StringBuilder();
+            stringbuilder2.append("SELECT DISTINCT G.GENRE FROM MOVIE_GENRES G, MOVIES M WHERE G.MID = M.MID AND M.NAME = '" + name + "'");
+            query = stringbuilder2.toString();
+            ResultSet rs2 = statement.executeQuery(query);
+            
+            //rs2 = statement.executeQuery(query);
+            while (rs2.next()){
+                    String genre = rs2.getString("GENRE");
+                    str2.append(genre + " ");
+            }
+            
+            String genre = str2.toString();
+            String movieGenre = "Genre: " + genre + "\n";
+            model.addElement(movieGenre);
+            
+            
+            
+            
+            StringBuilder stringbuilder3 = new StringBuilder();
+            StringBuilder str3 = new StringBuilder();
+            stringbuilder3.append("SELECT DISTINCT M.YEAR FROM MOVIES M WHERE M.NAME = '" + name + "'");
+            query = stringbuilder3.toString();
+            ResultSet rs3 = statement.executeQuery(query);
+            
+            while (rs3.next()){
+                    String year = rs3.getString("YEAR");
+                    str3.append(year);
+            }
+            
+            String year = str3.toString();
+            String movieYear = "Year: " + year + "\n";
+            model.addElement(movieYear);
+            
+            StringBuilder stringbuilder4 = new StringBuilder();
+            StringBuilder str4 = new StringBuilder();
+            stringbuilder4.append("SELECT DISTINCT C.COUNTRY FROM MOVIE_COUNTRIES C, MOVIES M WHERE C.MID = M.MID AND M.NAME = '" + name + "'");
+            query = stringbuilder4.toString();
+            ResultSet rs4 = statement.executeQuery(query);
+                       
+            while (rs4.next()){
+                    String country = rs4.getString("COUNTRY");
+                    str4.append(country + " ");
+            }
+            
+            String country = str4.toString();
+            String movieCountry = "Country Produced: " + country + "\n";
+            model.addElement(movieCountry);
+            
+            StringBuilder stringbuilder5 = new StringBuilder();
+            StringBuilder str5 = new StringBuilder();
+            stringbuilder5.append("SELECT DISTINCT L.COUNTRY FROM MOVIE_LOCATIONS L, MOVIES M WHERE L.MID = M.MID AND M.NAME = '" + name + "'");
+            query = stringbuilder5.toString();
+            ResultSet rs5 = statement.executeQuery(query);
+           
+           while (rs5.next()){
+                    String location = rs5.getString("COUNTRY");
+                    str5.append(location + " ");
+            }
+            
+            String location = str5.toString();
+            String movieLocation = "Filming Location(s): " + location + "\n";
+            model.addElement(movieLocation);
+            
+            StringBuilder stringbuilder6 = new StringBuilder();
+            StringBuilder str6 = new StringBuilder();
+            stringbuilder6.append("SELECT DISTINCT M.RATING FROM MOVIES M WHERE M.NAME = '" + name + "'");
+            query = stringbuilder6.toString();
+            ResultSet rs6 = statement.executeQuery(query);
+            while (rs6.next()){
+                    String rating = rs6.getString("RATING");
+                    str6.append(rating);
+            }
+            
+            String rating = str6.toString();
+            String movieRating = "Average Rating: " + rating + "\n";
+            model.addElement(movieRating);
+             
+            StringBuilder stringbuilder7 = new StringBuilder();
+            StringBuilder str7 = new StringBuilder();
+            stringbuilder7.append("SELECT DISTINCT M.NUM_REVIEW FROM MOVIES M WHERE M.NAME = '" + name + "'");
+            query = stringbuilder7.toString();
+            ResultSet rs7 = statement.executeQuery(query);
+            while (rs7.next()){
+                    String reviews = rs7.getString("NUM_REVIEW");
+                    str7.append(reviews);
+            }
+            
+            String reviews = str7.toString();
+            String movieReviews ="Average Number of Reviews: " + reviews + "\n";
+            model.addElement(movieReviews);
+            
+            rs.close();
+            rs2.close();
+            rs3.close();
+            rs4.close();
+            rs5.close();
+            rs6.close();
+            rs7.close();
+            
+            statement.close();
+            selectedMovieInfo.setModel(model);
+                    
+      
+            
+            
+            
+            //movieResultsText.setText((rs.getString("")) movieResultsList.getSelectedValue());
+            
+            
+        } catch(SQLException e){
+            System.out.println("Message: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("Vendor Error: " + e.getErrorCode());
+                e = e.getNextException();
+        }
+        
+     
+        
+           
+    }//GEN-LAST:event_movieResultsListMouseClicked
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+          
+            genreList.clearSelection();
+            buttonGroup1.clearSelection();  
+            
+            flag = true;
+            jRadioButton1.setEnabled(true);
+            jRadioButton2.setEnabled(true);
+            tagCount.setText("");
+            movieCount.setText("");
+            ratingComboBox.setSelectedIndex(0);
+            numReviewsComboBox.setSelectedIndex(0);
+            tagWeightComboBox.setSelectedIndex(0);
+            DefaultListModel listModel = (DefaultListModel) countryList.getModel();
+            listModel.clear();
+            //countryList.clearSelection();
+            
+           DefaultListModel listModel2 = new DefaultListModel();
+            filmLocationList.clearSelection();
+            filmLocationList.setModel(listModel2);
+           
+           
+            DefaultListModel listModel3 = new DefaultListModel();
+            movieResultsList.setModel(listModel3);
+            
+            
+            DefaultListModel listModel4 = new DefaultListModel();
+            movieTagsList.setModel(listModel4);
+            
+            ratingValueText.setText("");
+            numReviewsText.setText("");
+            yearBeginText.setText("");
+            yearEndText.setText("");
+            tagValueText.setText("");
+            
+            DefaultListModel listModel5 = new DefaultListModel();
+            selectedMovieInfo.setModel(listModel5);
+         
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void tagWeightComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tagWeightComboBoxActionPerformed
+        tagsCompare = (String) tagWeightComboBox.getSelectedItem();// TODO add your handling code here:
+    }//GEN-LAST:event_tagWeightComboBoxActionPerformed
+
     
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton clearButton;
     private javax.swing.JList<String> countryList;
     private javax.swing.JList<String> filmLocationList;
     private javax.swing.JList<String> genreList;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -950,25 +1535,26 @@ DefaultListModel model = new DefaultListModel();
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JButton loadCountryButton;
     private javax.swing.JButton loadLocationButton;
     private javax.swing.JList<String> locationList;
+    private javax.swing.JLabel movieCount;
     private javax.swing.JButton movieExecuteButton;
-    private javax.swing.JTextArea movieResultsText;
-    private javax.swing.JTextArea movieTagText;
+    private javax.swing.JList<String> movieResultsList;
+    private javax.swing.JList<String> movieTagsList;
     private javax.swing.JComboBox<String> numReviewsComboBox;
     private javax.swing.JTextField numReviewsText;
+    private javax.swing.JComboBox<String> ratingComboBox;
     private javax.swing.JTextField ratingValueText;
+    private javax.swing.JList<String> selectedMovieInfo;
+    private javax.swing.JLabel tagCount;
     private javax.swing.JButton tagExecuteButton;
+    private javax.swing.JTextField tagValueText;
     private javax.swing.JComboBox<String> tagWeightComboBox;
     private javax.swing.JTextField yearBeginText;
     private javax.swing.JTextField yearEndText;
     // End of variables declaration//GEN-END:variables
 
-    private static class connectjDBC {
-
-        public connectjDBC() {
-        }
-    }
 }
+
